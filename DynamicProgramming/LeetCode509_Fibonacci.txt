@@ -1,0 +1,143 @@
+https://leetcode.com/problems/fibonacci-number/
+
+Solution 1: Bottom Up tabulation
+class Solution {
+public:
+    int fib(int n) {
+        
+        if(n==0) return 0;
+        
+        if(n==1) return 1;
+        
+        int *arr = new int[n+1];
+        
+        arr[0]=0;
+        arr[1]=1;
+        
+        for(int i=2;i<=n;i++){
+            arr[i]=arr[i-1]+ arr[i-2];
+        }
+        
+        return arr[n];
+    }
+};
+
+Solution 2: Bottom up with no space
+class Solution {
+public:
+    int fib(int n) {
+        
+        if(n==0) return 0;
+        
+        if(n==1) return 1;
+        
+        int current=0;
+        int prev1=1;
+        int prev2=0;
+        
+        for(int i=2;i<=n;i++){
+            current=prev1+prev2;
+            prev2=prev1;
+            prev1=current;
+        }
+        
+        return current;
+    }
+};
+
+Solution 3: Top Down with memoization
+class Solution {
+    int *dp = new int[31]();
+public:
+    int fib(int n) {
+    
+        if(n<2) return n;
+        
+        if(dp[n]!=0){
+            
+            return dp[n];
+        }
+        
+        dp[n]= fib(n-1)+ fib(n-2);
+        
+        return dp[n];
+    }
+};
+
+
+Solution 4 : Leetcode using Golden Ratio   O(logn)
+class Solution {
+public:
+    int fib(int n) {
+        
+        if(n<2) return n;
+        
+        double goldenratio=(1+ sqrt(5))/2;
+        
+        return (int) round(pow(goldenratio,n)/sqrt(5));
+    }
+};
+
+Solution 5 : LeetCode using matrix multiplication 
+class Solution {
+public:
+    void multiply(int **arr1, int **arr2){
+        int x=arr1[0][0]*arr2[0][0]+arr1[0][1]*arr2[1][0];
+        int y = arr1[0][0] * arr2[0][1] + arr1[0][1] * arr2[1][1];
+        int z = arr1[1][0] * arr2[0][0] + arr1[1][1] * arr2[1][0];
+        int w = arr1[1][0] * arr2[0][1] + arr1[1][1] * arr2[1][1];
+        
+        arr1[0][0] = x;
+        arr1[0][1] = y;
+        arr1[1][0] = z;
+        arr1[1][1] = w;
+        
+    }
+    void Result(int **arr, int n){
+        if(n<=1){
+            return;
+        }
+        
+        Result(arr, n/2);
+        multiply(arr, arr);
+        
+          int **rr = new int* [2];
+        
+        for(int i=0;i<2;i++){
+            rr[i]= new int[2];
+        }
+        
+        rr[0][0]=1;
+        rr[0][1]=1;
+        rr[1][0]=1;
+        rr[1][1]=0;
+        
+        if(n%2!=0){
+            multiply(arr,rr);
+        }
+        
+    }
+    int fib(int n) {
+        
+       if(n<2) return n;
+        
+        int **arr = new int* [2];
+        
+        for(int i=0;i<2;i++){
+            arr[i]= new int[2];
+        }
+        
+        arr[0][0]=1;
+        arr[0][1]=1;
+        arr[1][0]=1;
+        arr[1][1]=0;
+        
+        Result(arr, n-1);
+        
+        return arr[0][0];
+        
+        
+        
+    }
+};
+
