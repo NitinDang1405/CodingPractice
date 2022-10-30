@@ -1,0 +1,129 @@
+https://leetcode.com/problems/delete-and-earn/
+
+
+Solution 1:
+class Solution {
+public:
+    int deleteHelper(vector<int> &nums, unordered_map<int,int> &mymap, unordered_map<int,int> &dp , int num){
+        if(num==0) return 0;
+        
+        if(num==1) return mymap.count(num)==1? mymap[num] : 0;
+        
+        if(dp.count(num)==1) return dp[num];
+        
+        int gain=mymap.count(num)==1? mymap[num] : 0;
+        
+        dp[num]= max(deleteHelper(nums,mymap,dp, num-1), deleteHelper(nums,mymap,dp, num-2)+ gain);
+        
+        return dp[num];
+    }
+    int deleteAndEarn(vector<int>& nums) {
+        
+        int n= nums.size();
+        
+        unordered_map<int, int> mymap;
+        
+        int maxi= INT_MIN;
+        
+        for(int i=0;i<n;i++){
+            maxi=nums[i]>maxi ? nums[i] : maxi;
+            if(mymap.count(nums[i])){
+                mymap[nums[i]] = mymap[nums[i]] + nums[i];
+            }else{
+                 mymap[nums[i]]=nums[i];
+            }
+        }
+        
+        unordered_map<int,int> dp;
+        
+         return deleteHelper(nums, mymap, dp, maxi);
+        
+        
+        
+        
+    }
+};
+
+
+Solution 2: 
+class Solution {
+public:
+    int deleteAndEarn(vector<int>& nums) {
+        
+        int n= nums.size();
+        
+        if(n==0) return 0;
+        if(n==1) return nums.back();
+        
+        unordered_map<int, int> mymap;
+        
+        int maxi= INT_MIN;
+        
+        for(int i=0;i<n;i++){
+            maxi=nums[i]>maxi ? nums[i] : maxi;
+            if(mymap.count(nums[i])){
+                mymap[nums[i]] = mymap[nums[i]] + nums[i];
+            }else{
+                 mymap[nums[i]]=nums[i];
+            }
+        }
+        
+       int *dp = new int[maxi+1];
+        dp[0]=0;
+        dp[1]=(mymap.count(1)==1) ? mymap[1] :0;
+        
+        for(int i=2;i<=maxi;i++){
+            int gain=(mymap.count(i)==1) ? mymap[i] :0;
+            dp[i]= max(dp[i-1], dp[i-2]+ gain);
+        }
+        
+        
+        return dp[maxi];
+        
+        
+        
+        
+    }
+};
+
+Solution 3:
+class Solution {
+public:
+    int deleteAndEarn(vector<int>& nums) {
+        
+        int n= nums.size();
+        
+        if(n==0) return 0;
+        if(n==1) return nums.back();
+        
+        unordered_map<int, int> mymap;
+        
+        int maxi= INT_MIN;
+        
+        for(int i=0;i<n;i++){
+            maxi=nums[i]>maxi ? nums[i] : maxi;
+            if(mymap.count(nums[i])){
+                mymap[nums[i]] = mymap[nums[i]] + nums[i];
+            }else{
+                 mymap[nums[i]]=nums[i];
+            }
+        }
+        int twoBack=0;
+        int oneBack=(mymap.count(1)==1) ? mymap[1] :0;
+        
+        for(int i=2;i<=maxi;i++){
+            int gain=(mymap.count(i)==1) ? mymap[i] :0;
+            int current= max(oneBack, twoBack+ gain);
+            twoBack= oneBack;
+            oneBack=current;
+        }
+        
+        
+        return oneBack;
+        
+        
+        
+        
+    }
+};
+

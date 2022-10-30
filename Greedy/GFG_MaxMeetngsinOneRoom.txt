@@ -1,0 +1,71 @@
+https://practice.geeksforgeeks.org/problems/maximum-meetings-in-one-room/1
+
+
+Solution:
+//{ Driver Code Starts
+//Initial Template for C++
+
+#include <bits/stdc++.h>
+using namespace std;
+
+
+// } Driver Code Ends
+//User function Template for C++
+
+class Solution{
+public:
+    vector<int> maxMeetings(int N,vector<int> &S,vector<int> &F){
+        
+        vector<pair<int, int>> Meetings;
+        
+        vector<int> result;
+        
+        for(int i=0; i<N;i++){
+            Meetings.push_back(make_pair(F[i], i));
+        }
+        
+        sort(Meetings.begin(), Meetings.end());
+        
+        result.push_back(Meetings[0].second + 1);
+        
+        int endTime= Meetings[0].first;
+        
+        for(int i=1; i<N;i++){
+            if(endTime<S[Meetings[i].second]){
+                result.push_back(Meetings[i].second +1 );
+                endTime=Meetings[i].first;
+            }
+        }
+        sort(result.begin(), result.end());
+        return result;
+    }
+};
+
+//{ Driver Code Starts.
+
+int main(){
+    int t;
+    cin>>t;
+    while(t--){
+        int n;
+        cin>>n;
+        vector<int> S(n),F(n);
+        for(int i=0;i<n;i++){
+            cin>>S[i];
+        }
+        for(int i=0;i<n;i++){
+            cin>>F[i];
+        }
+        Solution ob;
+        vector<int> ans=ob.maxMeetings(n,S,F);
+        for(int i=0;i<ans.size();i++){
+            cout<<ans[i];
+            if(i!=ans.size()-1){
+                cout<<" ";
+            }
+        }
+        cout<<endl;
+    }
+    return 0;
+}
+// } Driver Code Ends

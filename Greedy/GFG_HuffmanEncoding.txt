@@ -1,0 +1,105 @@
+https://practice.geeksforgeeks.org/problems/huffman-encoding3345/1
+
+
+Solution : Do again once
+//{ Driver Code Starts
+#include<bits/stdc++.h>
+using namespace std;
+
+// } Driver Code Ends
+
+class treeNode{
+    public:
+    int val;
+    treeNode *left, *right;
+    
+    treeNode(int val){
+        this->val=val;
+        left=NULL;
+        right=NULL;
+    }
+    
+};
+
+class cmp{
+    public:
+    bool operator()(treeNode *a, treeNode *b){
+	    return a->val >b->val;
+	}
+};
+
+class Solution
+{
+	public:
+	
+/*	static bool cmp(treeNode *a, treeNode *b){
+	    return a->val >b->val;
+	}
+	*/
+	void preorder(treeNode *root, vector<string> &ans, string temp){
+	    if(root->left== NULL &&root->right==NULL){
+	        ans.push_back(temp);
+	        return;
+	    }
+	    
+	    preorder(root->left, ans, temp+"0");
+	    preorder(root->right, ans, temp+"1");
+	}
+		vector<string> huffmanCodes(string S,vector<int> f,int N)
+		{
+		    // Code here
+		    priority_queue<treeNode *, vector<treeNode *> , cmp> p;
+		    
+		    for(int i=0; i<N ; i++){
+		        treeNode *temp= new treeNode(f[i]);
+		        p.push(temp);
+		    }
+		    
+		    while(p.size()>1){
+		        treeNode *left= p.top();
+		        p.pop();
+		        
+		        treeNode *right= p.top();
+		        p.pop();
+		        
+		        treeNode *newNode= new treeNode(left->val+ right->val);
+		        newNode->left=left;
+		        newNode->right=right;
+		        
+		        p.push(newNode);
+		    }
+		    
+		    
+		    treeNode *root=p.top();
+		    vector<string> ans;
+		    string temp="";
+		    preorder(root, ans, temp);
+		    
+		    return ans;
+		    
+		    
+		}
+};
+
+//{ Driver Code Starts.
+int main(){
+    int T;
+    cin >> T;
+    while(T--)
+    {
+	    string S;
+	    cin >> S;
+	    int N = S.length();
+	    vector<int> f(N);
+	    for(int i=0;i<N;i++){
+	        cin>>f[i];
+	    }
+	    Solution ob;
+	    vector<string> ans = ob.huffmanCodes(S,f,N);
+	    for(auto i: ans)
+	    	cout << i << " ";
+	    cout << "\n";
+    }
+	return 0;
+}
+// } Driver Code Ends

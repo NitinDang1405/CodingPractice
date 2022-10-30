@@ -1,0 +1,64 @@
+https://leetcode.com/problems/best-time-to-buy-and-sell-stock/
+
+Solution 1: THis will run into TLE due to the contraints given on n (since it is an n*2 approach)
+class Solution {
+public:
+    int maxProfit(vector<int>& prices) {
+        
+        int n= prices.size();
+        int maxi=0;
+        for(int i=0; i<n;i++){
+            for(int j=i+1; j<n ; j++){
+                if(prices[j]>prices[i]){
+                    maxi=max(maxi, prices[j]- prices[i]);
+                }
+            }
+        }
+        return maxi;
+    }
+};
+
+
+Solution 2: Optimized even without using any space
+class Solution {
+public:
+    int maxProfit(vector<int>& prices) {
+        
+        int n= prices.size();
+        int *dp = new int[n];
+        int maxUntilNow=prices[n-1];
+        int maxProfit=0;
+        
+        for(int i=n-2; i>=0; i--){
+            if(maxUntilNow > prices[i]){
+                maxProfit= max(maxProfit, maxUntilNow-prices[i] );
+            }else{
+                maxUntilNow=prices[i];
+            }
+        }
+        
+        return maxProfit;
+    }
+};
+
+Solution 3 : SImilar as 2 but we are just maintaining Minimum until now 
+class Solution {
+public:
+    int maxProfit(vector<int>& prices) {
+        
+        int n= prices.size();
+        int *dp = new int[n];
+        int minUntilNow=prices[0];
+        int maxProfit=0;
+        
+        for(int i=1; i<n; i++){
+            if(minUntilNow < prices[i]){
+                maxProfit= max(maxProfit, prices[i]-minUntilNow );
+            }else{
+                minUntilNow=prices[i];
+            }
+        }
+        
+        return maxProfit;
+    }
+};
